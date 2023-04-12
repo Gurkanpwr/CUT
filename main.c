@@ -4,7 +4,7 @@
 #include "stdlib.h"
 
 
-#define thread_num 4
+#define thread_num 5
 
 extern pthread_mutex_t mutex;
 pthread_t threads[thread_num];
@@ -36,6 +36,10 @@ int main() {
     rc= pthread_create(&threads[3],NULL,Watchdog,NULL);
     if(rc){
         perror("Pthread error for Watchdog");
+    }
+    rc= pthread_create(&threads[4],NULL, Logger,NULL);
+    if(rc){
+        perror("Error occured at Logger thread");
     }
     //pause();
     for (int i = 0; i < thread_num ; i++) {

@@ -8,17 +8,17 @@ long double CPU[4];
 long double usage;
 volatile int Terminate=0;
 FILE* fp;
-volatile int watch_counter[3]={0,0,0};
+
+volatile int watch_counter[4]={0,0,0,0};
 
 pthread_mutex_t mutex;
 
 
-void* Reader(void* p) {
+void* Reader(__attribute__((unused)) void* p) {
 
     while(!Terminate){
         pthread_mutex_lock(&mutex);
         fp=fopen("/proc/stat","r");
-
         fscanf(fp,"%*s %Lf %Lf %Lf %Lf",&CPU[0],&CPU[1],&CPU[2],&CPU[3]);
         fclose(fp);
         pthread_mutex_unlock(&mutex);
@@ -29,7 +29,7 @@ void* Reader(void* p) {
     pthread_exit(NULL);
 }
 
-void* Analyzer(void* p){
+void* Analyzer(__attribute__((unused)) void* p){
     long double prev_tmp[4]={},tmp[4];
     while(!Terminate) {
         pthread_mutex_lock(&mutex);
@@ -57,7 +57,7 @@ void* Analyzer(void* p){
     pthread_exit(NULL);
 }
 
-void* Printer(void* p){
+void* Printer(__attribute__((unused)) void* p){
    const int length=100;
     float data;
     int total=100;
@@ -93,7 +93,7 @@ void* Printer(void* p){
             printf(" ");
         }
 
-        printf("] %3.2f% \r",data);
+        printf("] %3.2f%% \r",data);
         fflush(stdout);
         sleep(1);
         watch_counter[2]++;
@@ -102,15 +102,15 @@ void* Printer(void* p){
     pthread_exit(NULL);
 }
 
-void* Watchdog(void* p){
-    int last_progress[3] = {0, 0, 0};
-    int deadlock_occurred = 0;
+void* Watchdog(__attribute__((unused)) void* p){
+    int last_progress[4] = {0,0, 0, 0};
+    int deadlock_occurred;
 
     while(!Terminate){
         sleep(2);
 
         deadlock_occurred = 0;
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             if (last_progress[i] == watch_counter[i]) {
                 deadlock_occurred = 1;
                 break;
@@ -126,6 +126,34 @@ void* Watchdog(void* p){
     }
 
     pthread_exit(NULL);
+}
+void* Logger(__attribute__((unused)) void* p){
+FILE* Logfp;
+int counter=0;
+remove("CPUlog.txt");
+while(!Terminate){
+
+
+    if(pthread_mutex_trylock(&mutex) ==EBUSY){
+        continue;
+    }
+    watch_counter[3]++;
+    long double CUT = usage*100;
+    counter++;
+    pthread_mutex_unlock(&mutex);
+    int size = snprintf(NULL,0,"%d.CPU usage: %Lf%%.\n",counter,CUT);
+    char *string= malloc(size+1);
+    sprintf(string,"%d.CPU usage: %Lf.\n",counter,CUT);
+    Logfp=fopen("CPUlog.txt","a");
+    if(Logfp == NULL){
+        perror("Log error");
+    }
+
+    fprintf(Logfp,"%s",string);
+    fclose(Logfp);
+    free(string);
+    sleep(1);
+}
 }
 
 int array_comp(long double* a, long double* b,int size){

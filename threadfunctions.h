@@ -9,11 +9,11 @@
 #ifndef CUT_THREADFUNCTIONS_H
 #define CUT_THREADFUNCTIONS_H
 
-void* Reader(void* p );
-void* Analyzer(void* p);
-void* Printer(void* p);
-void* Watchdog(void* p);
-void* Logger(void*);
+void* Reader(__attribute__((unused)) void* p );
+void* Analyzer(__attribute__((unused)) void* p);
+void* Printer(__attribute__((unused)) void* p);
+void* Watchdog(__attribute__((unused)) void* p);
+void* Logger(__attribute__((unused)) void*);
 void* sigterm_handler(void* );
 
 #endif //CUT_THREADFUNCTIONS_H
