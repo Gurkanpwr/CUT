@@ -3,9 +3,8 @@
 #include <unistd.h>
 #include "stdlib.h"
 
-extern volatile int state1,state2,state3;
 
-#define thread_num 3
+#define thread_num 4
 
 extern pthread_mutex_t mutex;
 pthread_t threads[thread_num];
@@ -15,9 +14,6 @@ int main() {
     if (pthread_mutex_init(&mutex,NULL) !=0){
         perror("Mutex Error");
     }
-
-    signal(SIGALRM,Watchdog);
-    alarm(5);
 
     rc = pthread_create(&threads[0], NULL, Reader, NULL);
     if (rc) {
@@ -35,6 +31,11 @@ int main() {
     if (rc) {
         perror("pthread_create");
         exit(EXIT_FAILURE);
+    }
+
+    rc= pthread_create(&threads[3],NULL,Watchdog,NULL);
+    if(rc){
+        perror("Pthread error for Watchdog");
     }
     //pause();
     for (int i = 0; i < thread_num ; i++) {
