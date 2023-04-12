@@ -3,14 +3,22 @@
 #include <unistd.h>
 #include "stdlib.h"
 
+extern volatile int state1,state2,state3;
 
 #define thread_num 3
 
-extern pthread_mutex_t mutexlck,mutex;
+extern pthread_mutex_t mutex;
 pthread_t threads[thread_num];
 
 int main() {
     int rc;
+    if (pthread_mutex_init(&mutex,NULL) !=0){
+        perror("Mutex Error");
+    }
+
+    signal(SIGALRM,Watchdog);
+    alarm(5);
+
     rc = pthread_create(&threads[0], NULL, Reader, NULL);
     if (rc) {
         perror("pthread_create");
@@ -28,7 +36,7 @@ int main() {
         perror("pthread_create");
         exit(EXIT_FAILURE);
     }
-
+    //pause();
     for (int i = 0; i < thread_num ; i++) {
         rc = pthread_join(threads[i], NULL);
         if (rc) {
@@ -37,9 +45,7 @@ int main() {
         }
     }
 
-    pthread_mutex_destroy(&mutexlck);
+
     pthread_mutex_destroy(&mutex);
-
-
-
+    return 0;
 }
