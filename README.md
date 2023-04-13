@@ -1,6 +1,6 @@
-# CPU Usage Tracker
+## CPU Usage Tracker
 
-#COMPLETED PART
+# COMPLETED PART
 
 Please run "setterm -linewrap off" command before running the code. Because I tried to implement a progression bar but it moves if linewrap is not set off.
 
