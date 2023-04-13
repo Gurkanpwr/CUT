@@ -1,6 +1,6 @@
-## CPU Usage Tracker
+# CPU Usage Tracker
 
-# COMPLETED PART
+## OMPLETED PART
 
 Please run "setterm -linewrap off" command before running the code. Because I tried to implement a progression bar but it moves if linewrap is not set off.
 
@@ -13,7 +13,7 @@ Program has 5 threads except main threads. These are:
 
 Also this program contains a sigterm handler function. To close the program properly and relase the heap memory.
 
-# Will add later
+## Will add later
 
 The program doesn't contains enough condition variables yet. I will implement it to increase efficiency.
 I will add some assert() functions to implement unit test. So far I didn't add it because I tried to check each output of any function using if condition.
