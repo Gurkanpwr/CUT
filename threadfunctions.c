@@ -3,6 +3,8 @@
 #include "string.h"
 #include <errno.h>
 
+#define thread_num 6
+pthread_t threads[thread_num];
 int array_comp(long double a[],long double b[],int size);
 long double CPU[4];
 long double usage;
@@ -58,21 +60,23 @@ void* Analyzer(__attribute__((unused)) void* p){
 }
 
 void* Printer(__attribute__((unused)) void* p){
-   const int length=100;
+    const int BAR_LENGTH = 100;
+    const int MAX_CPU_USAGE = 100;
+
     float data;
-    int total=100;
+
 
     while(!Terminate){
 
         if (pthread_mutex_trylock(&mutex) == EBUSY) {
-            continue; // skip critical section and try again later
+            continue;
         }
         data=(float)usage*100;
 
         pthread_mutex_unlock(&mutex);
 
-        int fill=(int)(data*length/(float)total);
-        int remain=length-fill;
+        int fill=(int)(data*BAR_LENGTH/(float)MAX_CPU_USAGE);
+        int remain=BAR_LENGTH-fill;
         printf("[");
         if(data<=30){
         for(int i=0;i<fill;i++){
@@ -130,7 +134,7 @@ void* Watchdog(__attribute__((unused)) void* p){
 void* Logger(__attribute__((unused)) void* p){
 FILE* Logfp;
 int counter=0;
-remove("CPUlog.txt");
+
 while(!Terminate){
 
 
@@ -143,8 +147,13 @@ while(!Terminate){
     pthread_mutex_unlock(&mutex);
     int size = snprintf(NULL,0,"%d.CPU usage: %Lf%%.\n",counter,CUT);
     char *string= malloc(size+1);
-    sprintf(string,"%d.CPU usage: %Lf.\n",counter,CUT);
+    if(string==NULL){
+        perror("Malloc error in logger thread");
+        exit(EXIT_FAILURE);
+    }
+    sprintf(string,"%d.CPU usage: %.4Lf.\n",counter,CUT);
     Logfp=fopen("CPUlog.txt","a");
+
     if(Logfp == NULL){
         perror("Log error");
     }
@@ -154,6 +163,11 @@ while(!Terminate){
     free(string);
     sleep(1);
 }
+}
+
+void sigterm_handler(__attribute__((unused)) int sig){
+    printf("SIGTERM signal detected...\n");
+    Terminate=1;
 }
 
 int array_comp(long double* a, long double* b,int size){
