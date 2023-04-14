@@ -5,7 +5,7 @@ set(CMAKE_C_STANDARD 99)
 
 add_executable(CUT main.c
         threadfunctions.h
-        threadfunctions.c)
+        threadfunctions.c Prod_Cons_buffer.c)
 
 
 

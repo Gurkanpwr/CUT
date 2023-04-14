@@ -1,18 +1,6 @@
-1.CPU usage: 0.0000.
-2.CPU usage: 9.0560.
-3.CPU usage: 39.7436.
-4.CPU usage: 4.2821.
-5.CPU usage: 5.5138.
-6.CPU usage: 4.2821.
-7.CPU usage: 4.0214.
-8.CPU usage: 4.0214.
-9.CPU usage: 4.5802.
-10.CPU usage: 4.5802.
-11.CPU usage: 7.0088.
-12.CPU usage: 31.4433.
-13.CPU usage: 6.2827.
-14.CPU usage: 6.2827.
-15.CPU usage: 3.8265.
-16.CPU usage: 7.6826.
-17.CPU usage: 7.6826.
-18.CPU usage: 3.3505.
+Fri Apr 14 06:06:35 2023.CPU usage: 11.8634%.
+Fri Apr 14 06:06:36 2023.CPU usage: 12.5984%.
+Fri Apr 14 06:06:37 2023.CPU usage: 4.0302%.
+Fri Apr 14 06:06:38 2023.CPU usage: 5.0633%.
+Fri Apr 14 06:06:39 2023.CPU usage: 9.1139%.
+Fri Apr 14 06:06:40 2023.CPU usage: 9.1139%.
