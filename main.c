@@ -10,6 +10,7 @@ extern pthread_mutex_t mutex;
 extern pthread_t threads[thread_num];
 
 int main() {
+    unit_test();
 
     int rc;
     remove("CPUlog.txt");

@@ -16,4 +16,5 @@ void* Watchdog(__attribute__((unused)) void* p);
 void* Logger(__attribute__((unused)) void*);
 void sigterm_handler(__attribute__((unused)) int sig);
 
+void unit_test(void);
 #endif //CUT_THREADFUNCTIONS_H

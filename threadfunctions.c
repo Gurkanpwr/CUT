@@ -2,7 +2,7 @@
 #include "stdlib.h"
 #include "string.h"
 #include <errno.h>
-
+#include "assert.h"
 #define thread_num 6
 pthread_t threads[thread_num];
 int array_comp(long double a[],long double b[],int size);
@@ -179,4 +179,21 @@ int array_comp(long double* a, long double* b,int size){
         }
     }
     return 0;
+}
+
+void unit_test(void){
+    /*
+     * Main purpose of this test is:
+     * Testing array_comp function. If it returns correct value or not. */
+    long double a[4]=   {1,2,3,4};
+
+    long double b[4]=   {1, 2, 3, 4};
+
+    long double c[4]=   {1,2,3,5};
+
+    assert(array_comp(a,b,4) ==0); // checking the same array with different address
+    assert(array_comp(a,a,4)==0);// checking the same array
+    assert(array_comp(a,c,4)==1); // checking different array
+
+    // function passed the test.
 }
